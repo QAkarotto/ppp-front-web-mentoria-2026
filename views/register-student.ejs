@@ -1,0 +1,42 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <% if (flash) { %>
+      <div class="notification <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+    <div class="columns is-centered">
+      <div class="column is-7">
+        <div class="card page-card">
+          <div class="card-content">
+            <p class="title is-4">Cadastrar aluno</p>
+            <form method="post" action="/register/student">
+              <div class="columns is-variable is-4">
+                <div class="column">
+                  <div class="field"><label class="label">Nome</label><input class="input" name="name" required /></div>
+                </div>
+                <div class="column">
+                  <div class="field"><label class="label">Email</label><input class="input" type="email" name="email" required /></div>
+                </div>
+              </div>
+              <div class="columns is-variable is-4">
+                <div class="column">
+                  <div class="field"><label class="label">Senha</label><input class="input" type="password" name="password" required /></div>
+                </div>
+                <div class="column">
+                  <div class="field"><label class="label">Instrumento</label><input class="input" name="instrument" required /></div>
+                </div>
+                <div class="column">
+                  <div class="field"><label class="label">Nível</label><input class="input" name="level" required /></div>
+                </div>
+              </div>
+              <div class="field">
+                <button class="button is-link" type="submit">Cadastrar aluno</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/foot') %>

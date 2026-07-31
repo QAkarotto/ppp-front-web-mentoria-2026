@@ -1,0 +1,145 @@
+<%- include('partials/head') %>
+<section class="hero is-hero-brand is-medium">
+  <div class="hero-body">
+    <div class="container">
+      <p class="title is-2">Acompanhamento da progressão musical</p>
+      <p class="subtitle is-5">Instrutores gerenciam lições, alunos e conclusões. Alunos consultam apenas o próprio progresso.</p>
+    </div>
+  </div>
+</section>
+<section class="section section-shell">
+  <div class="container">
+    <% if (flash) { %>
+      <div class="notification <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+    <% if (!currentUser) { %>
+      <div class="columns is-variable is-6">
+        <div class="column is-7">
+          <div class="card page-card">
+            <div class="card-content">
+              <p class="title is-4">Acesse o sistema</p>
+              <p class="content">Faça login como instrutor para administrar alunos e lições, ou como aluno para acompanhar sua evolução.</p>
+              <div class="buttons">
+                <a class="button is-link" href="/login">Entrar</a>
+                <a class="button is-light" href="/register/instructor">Criar primeiro instrutor</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-5">
+          <div class="card page-card">
+            <div class="card-content">
+              <p class="title is-5">Regras do sistema</p>
+              <div class="content">
+                <ul>
+                  <li>Instrutores acessam todas as funcionalidades.</li>
+                  <li>Alunos apenas consultam a própria progressão.</li>
+                  <li>A progressão compara lições existentes com lições concluídas.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } else if (currentUser.role === 'instructor') { %>
+      <div class="columns is-variable is-6">
+        <div class="column is-4">
+          <div class="card page-card">
+            <div class="card-content">
+              <p class="title is-6">Total de alunos</p>
+              <p class="title is-2"><%= students.length %></p>
+            </div>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="card page-card">
+            <div class="card-content">
+              <p class="title is-6">Lições cadastradas</p>
+              <p class="title is-2"><%= lessons.length %></p>
+            </div>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="card page-card">
+            <div class="card-content">
+              <p class="title is-6">Acesso</p>
+              <p class="content">Use os menus para gerenciar alunos, lições e acompanhar progresso individual.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card page-card mt-5">
+        <div class="card-content">
+          <p class="title is-5">Alunos recentes</p>
+          <% if (students.length === 0) { %>
+            <p class="content">Nenhum aluno cadastrado ainda.</p>
+          <% } else { %>
+            <div class="table-container">
+              <table class="table is-fullwidth is-striped">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Instrumento</th>
+                    <th>Nível</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% students.forEach((student) => { %>
+                    <tr>
+                      <td><a href="/students/<%= student.id %>"><%= student.name %></a></td>
+                      <td><%= student.email %></td>
+                      <td><%= student.instrument %></td>
+                      <td><%= student.level %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% } else if (progress) { %>
+      <div class="card page-card">
+        <div class="card-content">
+          <p class="title is-4">Meu progresso</p>
+          <p class="subtitle is-6"><%= progress.student.name %> - <%= progress.student.instrument %> - <%= progress.student.level %></p>
+          <div class="columns is-variable is-4">
+            <div class="column is-3"><strong>Total:</strong> <%= progress.summary.totalLessons %></div>
+            <div class="column is-3"><strong>Concluídas:</strong> <%= progress.summary.completedLessons %></div>
+            <div class="column is-3"><strong>Pendentes:</strong> <%= progress.summary.pendingLessons %></div>
+            <div class="column is-3"><strong>Avanço:</strong> <%= progress.summary.progressPercentage %>%</div>
+          </div>
+          <div class="progress-meter mb-4"><span data-progress="<%= progress.summary.progressPercentage %>"></span></div>
+          <div class="columns is-variable is-5">
+            <div class="column">
+              <p class="title is-6">Lições concluídas</p>
+              <% if (progress.completedLessons.length === 0) { %>
+                <p>Nenhuma lição concluída.</p>
+              <% } else { %>
+                <ul>
+                  <% progress.completedLessons.forEach((lesson) => { %>
+                    <li><%= lesson.title %> - <%= lesson.instrument %> - <%= lesson.level %></li>
+                  <% }) %>
+                </ul>
+              <% } %>
+            </div>
+            <div class="column">
+              <p class="title is-6">Lições pendentes</p>
+              <% if (progress.pendingLessons.length === 0) { %>
+                <p>Não há lições pendentes.</p>
+              <% } else { %>
+                <ul>
+                  <% progress.pendingLessons.forEach((lesson) => { %>
+                    <li><%= lesson.title %> - <%= lesson.instrument %> - <%= lesson.level %></li>
+                  <% }) %>
+                </ul>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+<%- include('partials/foot') %>

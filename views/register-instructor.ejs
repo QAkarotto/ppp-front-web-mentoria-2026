@@ -1,0 +1,35 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <% if (flash) { %>
+      <div class="notification <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div class="card page-card">
+          <div class="card-content">
+            <p class="title is-4">Cadastrar instrutor</p>
+            <form method="post" action="/register/instructor">
+              <div class="field">
+                <label class="label">Nome</label>
+                <div class="control"><input class="input" name="name" required /></div>
+              </div>
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control"><input class="input" type="email" name="email" required /></div>
+              </div>
+              <div class="field">
+                <label class="label">Senha</label>
+                <div class="control"><input class="input" type="password" name="password" required /></div>
+              </div>
+              <div class="field">
+                <button class="button is-link" type="submit">Cadastrar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/foot') %>

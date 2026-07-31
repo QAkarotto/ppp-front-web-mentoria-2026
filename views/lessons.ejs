@@ -1,0 +1,43 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <% if (flash) { %>
+      <div class="notification <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+    <div class="card page-card">
+      <div class="card-content">
+        <div class="level">
+          <div class="level-left"><p class="title is-4">Lições</p></div>
+          <div class="level-right"><a class="button is-link" href="/lessons/new">Nova lição</a></div>
+        </div>
+        <% if (lessons.length === 0) { %>
+          <p>Nenhuma lição cadastrada.</p>
+        <% } else { %>
+          <div class="table-container">
+            <table class="table is-fullwidth is-striped">
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Instrumento</th>
+                  <th>Nível</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% lessons.forEach((lesson) => { %>
+                  <tr>
+                    <td><%= lesson.title %></td>
+                    <td><%= lesson.instrument %></td>
+                    <td><%= lesson.level %></td>
+                    <td><%= lesson.description || '-' %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/foot') %>

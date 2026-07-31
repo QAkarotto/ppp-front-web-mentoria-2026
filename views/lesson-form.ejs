@@ -1,0 +1,27 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <% if (flash) { %>
+      <div class="notification <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+    <div class="columns is-centered">
+      <div class="column is-7">
+        <div class="card page-card">
+          <div class="card-content">
+            <p class="title is-4">Nova lição</p>
+            <form method="post" action="/lessons">
+              <div class="field"><label class="label">Título</label><input class="input" name="title" required /></div>
+              <div class="columns is-variable is-4">
+                <div class="column"><div class="field"><label class="label">Instrumento</label><input class="input" name="instrument" required /></div></div>
+                <div class="column"><div class="field"><label class="label">Nível</label><input class="input" name="level" required /></div></div>
+              </div>
+              <div class="field"><label class="label">Descrição</label><textarea class="textarea" name="description"></textarea></div>
+              <div class="field"><button class="button is-link" type="submit">Salvar lição</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/foot') %>

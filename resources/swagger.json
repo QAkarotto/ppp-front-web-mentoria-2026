@@ -1,0 +1,415 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API de Progressão de Alunos de Música",
+    "version": "1.0.0",
+    "description": "API REST para cadastro de instrutores, alunos, lições e acompanhamento de progressão em memória."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    { "name": "Auth" },
+    { "name": "Students" },
+    { "name": "Lessons" },
+    { "name": "Progress" }
+  ],
+  "paths": {
+    "/api/auth/instructors/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Registra um instrutor",
+        "description": "O primeiro instrutor pode ser criado sem token para bootstrap. Depois disso, apenas instrutores autenticados podem cadastrar novos instrutores.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RegisterInstructorRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Instrutor criado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InstructorResponse" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "409": { "$ref": "#/components/responses/Conflict" }
+        }
+      }
+    },
+    "/api/auth/students/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Registra um aluno",
+        "security": [{ "bearerAuth": [] }],
+        "description": "Somente instrutores autenticados podem cadastrar alunos.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RegisterStudentRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Aluno criado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StudentResponse" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "409": { "$ref": "#/components/responses/Conflict" }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Realiza login como instrutor ou aluno",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Autenticado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginResponse" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/students": {
+      "get": {
+        "tags": ["Students"],
+        "summary": "Lista alunos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de alunos", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StudentListResponse" } } } },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/api/students/{id}": {
+      "get": {
+        "tags": ["Students"],
+        "summary": "Busca dados de um aluno",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Aluno encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StudentResponse" } } } },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/students/{id}/completed-lessons": {
+      "post": {
+        "tags": ["Students"],
+        "summary": "Registra uma lição concluída pelo aluno",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CompletedLessonRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Lição concluída registrada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CompletedLessonResponse" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": { "$ref": "#/components/responses/Conflict" }
+        }
+      }
+    },
+    "/api/lessons": {
+      "get": {
+        "tags": ["Lessons"],
+        "summary": "Lista lições cadastradas",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de lições", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LessonListResponse" } } } },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      },
+      "post": {
+        "tags": ["Lessons"],
+        "summary": "Registra uma lição",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LessonRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Lição criada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LessonResponse" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/api/progress/me": {
+      "get": {
+        "tags": ["Progress"],
+        "summary": "Consulta o progresso do aluno autenticado",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Progresso do aluno", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProgressResponse" } } } },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/progress/students/{id}": {
+      "get": {
+        "tags": ["Progress"],
+        "summary": "Consulta o progresso de um aluno",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Progresso do aluno", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProgressResponse" } } } },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Requisição inválida",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Acesso negado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Conflito de cadastro",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "bad_request" },
+          "message": { "type": "string", "example": "Campos obrigatórios ausentes: email." }
+        }
+      },
+      "Instructor": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "role": { "type": "string", "example": "instructor" }
+        }
+      },
+      "Student": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "instrument": { "type": "string" },
+          "level": { "type": "string" },
+          "role": { "type": "string", "example": "student" }
+        }
+      },
+      "Lesson": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "instrument": { "type": "string" },
+          "level": { "type": "string" },
+          "description": { "type": "string", "nullable": true }
+        }
+      },
+      "CompletedLesson": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "studentId": { "type": "string" },
+          "lessonId": { "type": "string" },
+          "completedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Progress": {
+        "type": "object",
+        "properties": {
+          "student": { "$ref": "#/components/schemas/Student" },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "totalLessons": { "type": "integer" },
+              "completedLessons": { "type": "integer" },
+              "pendingLessons": { "type": "integer" },
+              "progressPercentage": { "type": "integer" }
+            }
+          },
+          "completedLessons": { "type": "array", "items": { "$ref": "#/components/schemas/Lesson" } },
+          "pendingLessons": { "type": "array", "items": { "$ref": "#/components/schemas/Lesson" } }
+        }
+      },
+      "RegisterInstructorRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "RegisterStudentRequest": {
+        "type": "object",
+        "required": ["name", "email", "password", "instrument", "level"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "instrument": { "type": "string" },
+          "level": { "type": "string" }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "LessonRequest": {
+        "type": "object",
+        "required": ["title", "instrument", "level"],
+        "properties": {
+          "title": { "type": "string" },
+          "instrument": { "type": "string" },
+          "level": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "CompletedLessonRequest": {
+        "type": "object",
+        "required": ["lessonId"],
+        "properties": {
+          "lessonId": { "type": "string" },
+          "completedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "InstructorResponse": {
+        "type": "object",
+        "properties": {
+          "instructor": { "$ref": "#/components/schemas/Instructor" }
+        }
+      },
+      "StudentResponse": {
+        "type": "object",
+        "properties": {
+          "student": { "$ref": "#/components/schemas/Student" }
+        }
+      },
+      "StudentListResponse": {
+        "type": "object",
+        "properties": {
+          "students": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Student" }
+          }
+        }
+      },
+      "LessonResponse": {
+        "type": "object",
+        "properties": {
+          "lesson": { "$ref": "#/components/schemas/Lesson" }
+        }
+      },
+      "LessonListResponse": {
+        "type": "object",
+        "properties": {
+          "lessons": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Lesson" }
+          }
+        }
+      },
+      "CompletedLessonResponse": {
+        "type": "object",
+        "properties": {
+          "completedLesson": { "$ref": "#/components/schemas/CompletedLesson" }
+        }
+      },
+      "ProgressResponse": {
+        "type": "object",
+        "properties": {
+          "progress": { "$ref": "#/components/schemas/Progress" }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" },
+          "user": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/Instructor" },
+              { "$ref": "#/components/schemas/Student" }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

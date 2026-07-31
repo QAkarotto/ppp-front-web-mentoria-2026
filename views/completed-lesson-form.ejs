@@ -1,0 +1,38 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-7">
+        <div class="card page-card">
+          <div class="card-content">
+            <p class="title is-4">Registrar lição concluída</p>
+            <p class="subtitle is-6"><%= student.name %></p>
+            <form method="post" action="/students/<%= student.id %>/completed-lessons">
+              <div class="field">
+                <label class="label">Lição</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select name="lessonId" required>
+                      <option value="">Selecione uma lição</option>
+                      <% lessons.forEach((lesson) => { %>
+                        <option value="<%= lesson.id %>"><%= lesson.title %> - <%= lesson.instrument %> - <%= lesson.level %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Data de conclusão</label>
+                <input class="input" type="datetime-local" name="completedAt" />
+              </div>
+              <div class="field">
+                <button class="button is-link" type="submit">Registrar conclusão</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/foot') %>

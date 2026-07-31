@@ -1,0 +1,39 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <div class="card page-card">
+      <div class="card-content">
+        <p class="title is-4"><%= student.name %></p>
+        <p class="subtitle is-6"><%= student.email %> - <%= student.instrument %> - <%= student.level %></p>
+        <% if (progress) { %>
+          <div class="columns is-variable is-4">
+            <div class="column is-3"><strong>Total:</strong> <%= progress.summary.totalLessons %></div>
+            <div class="column is-3"><strong>Concluídas:</strong> <%= progress.summary.completedLessons %></div>
+            <div class="column is-3"><strong>Pendentes:</strong> <%= progress.summary.pendingLessons %></div>
+            <div class="column is-3"><strong>Avanço:</strong> <%= progress.summary.progressPercentage %>%</div>
+          </div>
+          <div class="progress-meter mb-5"><span data-progress="<%= progress.summary.progressPercentage %>"></span></div>
+          <div class="columns is-variable is-5">
+            <div class="column">
+              <p class="title is-6">Concluídas</p>
+              <ul>
+                <% progress.completedLessons.forEach((lesson) => { %>
+                  <li><%= lesson.title %> - <%= lesson.instrument %> - <%= lesson.level %></li>
+                <% }) %>
+              </ul>
+            </div>
+            <div class="column">
+              <p class="title is-6">Pendentes</p>
+              <ul>
+                <% progress.pendingLessons.forEach((lesson) => { %>
+                  <li><%= lesson.title %> - <%= lesson.instrument %> - <%= lesson.level %></li>
+                <% }) %>
+              </ul>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/foot') %>

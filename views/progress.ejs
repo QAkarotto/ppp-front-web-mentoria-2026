@@ -1,0 +1,44 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <% if (flash) { %>
+      <div class="notification <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+    <% if (!progress) { %>
+      <div class="notification is-warning">Nenhum progresso disponível.</div>
+    <% } else { %>
+      <div class="card page-card">
+        <div class="card-content">
+          <p class="title is-4"><%= progress.student.name %></p>
+          <p class="subtitle is-6"><%= progress.student.instrument %> - <%= progress.student.level %></p>
+          <div class="columns is-variable is-4">
+            <div class="column is-3"><strong>Total:</strong> <%= progress.summary.totalLessons %></div>
+            <div class="column is-3"><strong>Concluídas:</strong> <%= progress.summary.completedLessons %></div>
+            <div class="column is-3"><strong>Pendentes:</strong> <%= progress.summary.pendingLessons %></div>
+            <div class="column is-3"><strong>Avanço:</strong> <%= progress.summary.progressPercentage %>%</div>
+          </div>
+          <div class="progress-meter mb-5"><span data-progress="<%= progress.summary.progressPercentage %>"></span></div>
+          <div class="columns is-variable is-5">
+            <div class="column">
+              <p class="title is-6">Lições concluídas</p>
+              <ul>
+                <% progress.completedLessons.forEach((lesson) => { %>
+                  <li><%= lesson.title %> - <%= lesson.instrument %> - <%= lesson.level %></li>
+                <% }) %>
+              </ul>
+            </div>
+            <div class="column">
+              <p class="title is-6">Lições pendentes</p>
+              <ul>
+                <% progress.pendingLessons.forEach((lesson) => { %>
+                  <li><%= lesson.title %> - <%= lesson.instrument %> - <%= lesson.level %></li>
+                <% }) %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+<%- include('partials/foot') %>

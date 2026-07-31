@@ -1,0 +1,9 @@
+    </main>
+    <script>
+      document.querySelectorAll('[data-progress]').forEach((element) => {
+        const value = Number(element.getAttribute('data-progress') || 0);
+        element.style.width = `${Math.max(0, Math.min(100, value))}%`;
+      });
+    </script>
+  </body>
+</html>

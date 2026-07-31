@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progressão Musical</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <nav class="navbar is-white has-shadow" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Progressão Musical</a>
+      </div>
+      <div class="navbar-menu is-active">
+        <div class="navbar-start">
+          <% if (currentUser && currentUser.role === 'instructor') { %>
+            <a class="navbar-item" href="/students">Alunos</a>
+            <a class="navbar-item" href="/lessons">Lições</a>
+            <a class="navbar-item" href="/register/student">Cadastrar aluno</a>
+            <a class="navbar-item" href="/lessons/new">Nova lição</a>
+          <% } %>
+          <% if (currentUser && currentUser.role === 'student') { %>
+            <a class="navbar-item" href="/progress/me">Meu progresso</a>
+          <% } %>
+        </div>
+        <div class="navbar-end">
+          <% if (currentUser) { %>
+            <div class="navbar-item">
+              <span class="tag is-soft is-medium"><%= currentUser.name %> - <%= currentUser.role %></span>
+            </div>
+            <div class="navbar-item">
+              <form method="post" action="/logout">
+                <button class="button is-light" type="submit">Sair</button>
+              </form>
+            </div>
+          <% } else { %>
+            <div class="navbar-item">
+              <a class="button is-link is-light" href="/login">Entrar</a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </nav>
+    <main>

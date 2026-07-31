@@ -1,0 +1,49 @@
+<%- include('partials/head') %>
+<section class="section section-shell">
+  <div class="container">
+    <% if (flash) { %>
+      <div class="notification <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+    <div class="card page-card">
+      <div class="card-content">
+        <div class="level">
+          <div class="level-left"><p class="title is-4">Alunos</p></div>
+          <div class="level-right"><a class="button is-link" href="/register/student">Cadastrar aluno</a></div>
+        </div>
+        <% if (students.length === 0) { %>
+          <p>Nenhum aluno cadastrado.</p>
+        <% } else { %>
+          <div class="table-container">
+            <table class="table is-fullwidth is-striped">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>Instrumento</th>
+                  <th>Nível</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% students.forEach((student) => { %>
+                  <tr>
+                    <td><%= student.name %></td>
+                    <td><%= student.email %></td>
+                    <td><%= student.instrument %></td>
+                    <td><%= student.level %></td>
+                    <td>
+                      <a class="button is-small is-light" href="/students/<%= student.id %>">Ver</a>
+                      <a class="button is-small is-link is-light" href="/progress/students/<%= student.id %>">Progresso</a>
+                      <a class="button is-small is-success is-light" href="/students/<%= student.id %>/completed-lessons/new">Concluir lição</a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/foot') %>
